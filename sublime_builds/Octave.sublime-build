@@ -1,0 +1,18 @@
+{
+    "path": "/usr/local/bin:/bin/bash",
+    "env": {"GNUTERM": "x11",
+            "FONTCONFIG_PATH":  "/opt/X11/lib/X11/fontconfig"},
+    "cmd": [
+        "octave",
+        // Options
+        "--no-gui",
+        "--silent",
+        "--verbose",
+        // "--traditional",  // Set variables for closer MATLAB compatibility.
+        "--persist",
+        "--interactive",
+        "-p $file_path",
+        "$file_name"
+    ],
+    "selector": "source.m"
+}
