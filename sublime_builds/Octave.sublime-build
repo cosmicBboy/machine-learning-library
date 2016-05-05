@@ -1,9 +1,9 @@
 {
-    "path": "/usr/local/bin:/bin/bash",
+    "path": "/usr/local/octave/3.8.0/bin/:/usr/local/bin:/bin/bash",
     "env": {"GNUTERM": "x11",
             "FONTCONFIG_PATH":  "/opt/X11/lib/X11/fontconfig"},
     "cmd": [
-        "octave",
+        "octave-3.8.0",
         // Options
         "--no-gui",
         "--silent",
