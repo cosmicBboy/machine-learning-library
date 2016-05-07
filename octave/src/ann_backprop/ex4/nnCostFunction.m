@@ -86,8 +86,8 @@ J = (1 / m) * sum(sum(-(Y) .* log(A3) .- (1 - Y) .* log(1 - A3))) + reg_term;
 %               over the training examples if you are implementing it for the 
 %               first time.
 
-D_1 = zeros(hidden_layer_size, input_layer_size);
-D_2 = zeros(num_labels, hidden_layer_size);
+D_1 = zeros(hidden_layer_size, (input_layer_size + 1));
+D_2 = zeros(num_labels, (hidden_layer_size + 1));
 for t = 1:m,
     % forward propagation
     a_1 = X(t,:);
@@ -102,12 +102,12 @@ for t = 1:m,
     d_2 = (d_3 * Theta2_no_bias) .* sigmoidGradient(z_2);
 
     % compute gradients
-    D_2 = D_2 + d_3' * a_2(2:end);
-    D_1 = D_1 + d_2' * a_1(2:end);
+    D_2 = D_2 + d_3' * a_2;
+    D_1 = D_1 + d_2' * a_1;
 end
 
-Theta1_grad = [zeros(hidden_layer_size, 1) (1 / m) * D_1];
-Theta2_grad = [zeros(num_labels, 1) (1 / m) * D_2];
+Theta1_grad = (1 / m) * D_1;
+Theta2_grad = (1 / m) * D_2;
 
 % Part 3: Implement regularization with the cost function and gradients.
 %
