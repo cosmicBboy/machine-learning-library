@@ -1,3 +1,5 @@
 *.txt
 *.json
 *.csv
+*.native
+_build
