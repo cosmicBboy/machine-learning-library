@@ -49,20 +49,6 @@ options = struct('MaxIter', 200,'useMex',0);
 theta = minFunc(@linear_regression, theta, options, train.X, train.y);
 fprintf('Optimization took %f seconds.\n', toc);
 
-% Run minFunc with linear_regression_vec.m as the objective.
-%
-% TODO:  Implement linear regression in linear_regression_vec.m
-% using MATLAB's vectorization features to speed up your code.
-% Compare the running time for your linear_regression.m and
-% linear_regression_vec.m implementations.
-%
-% Uncomment the lines below to run your vectorized code.
-%Re-initialize parameters
-%theta = rand(n,1);
-%tic;
-%theta = minFunc(@linear_regression_vec, theta, options, train.X, train.y);
-%fprintf('Optimization took %f seconds.\n', toc);
-
 % Plot predicted prices and actual prices from training set.
 actual_prices = train.y;
 predicted_prices = theta'*train.X;
