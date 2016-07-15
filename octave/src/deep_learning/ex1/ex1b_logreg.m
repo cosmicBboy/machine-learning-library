@@ -12,7 +12,7 @@ binary_digits = true;
 [train,test] = ex1_load_mnist(binary_digits);
 
 % Add row of 1s to the dataset to act as an intercept term.
-train.X = [ones(1,size(train.X,2)); train.X]; 
+train.X = [ones(1,size(train.X,2)); train.X];
 test.X = [ones(1,size(test.X,2)); test.X];
 
 % Training set dimensions
@@ -20,7 +20,7 @@ m=size(train.X,2);
 n=size(train.X,1);
 
 % Train logistic regression classifier using minFunc
-options = struct('MaxIter', 100);
+options = struct('MaxIter', 200,'useMex',0);
 
 % First, we initialize theta to some small random values.
 theta = rand(n,1)*0.001;

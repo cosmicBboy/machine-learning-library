@@ -3,3 +3,4 @@
 *.csv
 *.native
 _build
+tmp
