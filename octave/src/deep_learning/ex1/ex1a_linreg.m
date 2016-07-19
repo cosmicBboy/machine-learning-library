@@ -47,6 +47,9 @@ tic;
 % https://github.com/amaas/stanford_dl_ex/issues/3
 options = struct('MaxIter', 200,'useMex',0);
 theta = minFunc(@linear_regression, theta, options, train.X, train.y);
+% call gradient checking function
+num_checks = 100;
+grad_check(@linear_regression, theta, num_checks, train.X, train.y);
 fprintf('Optimization took %f seconds.\n', toc);
 
 % Plot predicted prices and actual prices from training set.

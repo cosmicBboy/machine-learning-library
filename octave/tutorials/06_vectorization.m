@@ -13,3 +13,10 @@ prediction
 % vectorized implementation
 disp('Vectorized:')
 theta' * x_i
+
+% example: normalizing many vectors
+X = [1 2; 3 4; 5 6]
+% compute the row-wise sum of squares
+X_norm = sqrt(sum(X .^2, 1 ));
+% divide each row with X_norm
+Y = bsxfun(@rdivide, X, X_norm);
