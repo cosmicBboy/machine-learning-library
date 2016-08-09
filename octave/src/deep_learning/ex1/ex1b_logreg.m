@@ -33,7 +33,7 @@ tic;
 theta=minFunc(@logistic_regression, theta, options, train.X, train.y);
 
 num_checks = 100;
-grad_check(@linear_regression, theta, num_checks, train.X, train.y);
+grad_check(@logistic_regression, theta, num_checks, train.X, train.y);
 fprintf('Optimization took %f seconds.\n', toc);
 
 % Print out training accuracy.

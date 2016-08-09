@@ -13,7 +13,7 @@ num_classes = 10;
 [train,test] = ex1_load_mnist(binary_digits);
 
 % Add row of 1s to the dataset to act as an intercept term.
-train.X = [ones(1,size(train.X,2)); train.X]; 
+train.X = [ones(1,size(train.X,2)); train.X];
 test.X = [ones(1,size(test.X,2)); test.X];
 train.y = train.y+1; % make labels 1-based.
 test.y = test.y+1; % make labels 1-based.
@@ -23,7 +23,7 @@ m=size(train.X,2);
 n=size(train.X,1);
 
 % Train softmax classifier using minFunc
-options = struct('MaxIter', 200);
+options = struct('MaxIter', 200,'useMex',0);
 
 % Initialize theta.  We use a matrix where each column corresponds to a class,
 % and each row is a classifier coefficient for that class.
@@ -38,6 +38,9 @@ theta = rand(n,num_classes-1)*0.001;
 %
 tic;
 theta(:)=minFunc(@softmax_regression_vec, theta(:), options, train.X, train.y);
+% % gradient checking
+% num_checks = 20;
+% grad_check(@softmax_regression_vec, theta, num_checks, train.X, train.y);
 fprintf('Optimization took %f seconds.\n', toc);
 theta=[theta, zeros(n,1)]; % expand theta to include the last class.
 
@@ -49,7 +52,6 @@ fprintf('Training accuracy: %2.1f%%\n', 100*accuracy);
 % Print out test accuracy.
 accuracy = multi_classifier_accuracy(theta,test.X,test.y);
 fprintf('Test accuracy: %2.1f%%\n', 100*accuracy);
-
 
 % % for learning curves
 % global test
