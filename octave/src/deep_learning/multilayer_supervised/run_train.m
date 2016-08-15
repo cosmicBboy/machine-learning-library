@@ -10,6 +10,7 @@ ei = [];
 % minfunc and mnist data helpers
 addpath ../common;
 addpath(genpath('../common/minFunc_2012/minFunc'));
+addpath ../ex1;
 
 %% load mnist data
 [data_train, labels_train, data_test, labels_test] = load_preprocess_mnist();
@@ -21,16 +22,23 @@ addpath(genpath('../common/minFunc_2012/minFunc'));
 % only (no changes to the objective function code)
 
 % dimension of input features
-ei.input_dim = 784;
+ei.input_dim = 784; % NOTE: default value should be 784
 % number of output classes
 ei.output_dim = 10;
 % sizes of all hidden layers and the output layer
-ei.layer_sizes = [256, ei.output_dim];
+ei.layer_sizes = [256, ei.output_dim]; % NOTE default value should be 256
 % scaling parameter for l2 weight regularization penalty
 ei.lambda = 0;
 % which type of activation function to use in hidden layers
 % feel free to implement support for only the logistic sigmoid function
-ei.activation_fun = 'logistic';
+% this should reference a function in the current directory (or any other
+% directory in PATH)
+ei.activation_fun = @sigmoid;
+
+% adjust the data if you want to train a NN on a subset of the data
+data_train = data_train(1:ei.input_dim, :);
+labels_train = labels_train(:);
+data_test = data_test(1:ei.input_dim, :);
 
 %% setup random initial weights
 stack = initialize_weights(ei);
@@ -41,10 +49,15 @@ options = [];
 options.display = 'iter';
 options.maxFunEvals = 1e6;
 options.Method = 'lbfgs';
+options.useMex = 0;
+pred_only = false;
 
 %% run training
+% num_checks = 100;
+% grad_check(@supervised_dnn_cost, params, num_checks, ei, data_train,...
+%   labels_train);
 [opt_params,opt_value,exitflag,output] = minFunc(@supervised_dnn_cost,...
-    params,options,ei, data_train, labels_train);
+  params, options, ei, data_train, labels_train, pred_only);
 
 %% compute accuracy on the test and train set
 [~, ~, pred] = supervised_dnn_cost( opt_params, ei, data_test, [], true);

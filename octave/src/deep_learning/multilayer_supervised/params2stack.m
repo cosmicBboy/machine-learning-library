@@ -1,13 +1,13 @@
 function stack = params2stack(params, ei)
 
-% Converts a flattened parameter vector into a nice "stack" structure 
+% Converts a flattened parameter vector into a nice "stack" structure
 % for us to work with. This is useful when you're building multilayer
 % networks.
 %
 % stack = params2stack(params, netconfig)
 %
 % params - flattened parameter vector
-% ei - auxiliary variable containing 
+% ei - auxiliary variable containing
 %             the configuration of the network
 %
 
@@ -16,7 +16,7 @@ function stack = params2stack(params, ei)
 depth = numel(ei.layer_sizes);
 stack = cell(depth,1);
 % the size of the previous layer
-prev_size = ei.input_dim; 
+prev_size = ei.input_dim;
 % mark current position in parameter vector
 cur_pos = 1;
 
@@ -34,10 +34,10 @@ for d = 1:depth
     blen = hidden;
     stack{d}.b = reshape(params(cur_pos:cur_pos+blen-1), hidden, 1);
     cur_pos = cur_pos+blen;
-    
+
     % Set previous layer size
     prev_size = hidden;
-    
+
 end
 
 end
