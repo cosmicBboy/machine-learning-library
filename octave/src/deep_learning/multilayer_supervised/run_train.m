@@ -9,7 +9,6 @@ ei = [];
 % add common directory to your path for
 % minfunc and mnist data helpers
 addpath ../common;
-addpath(genpath('../common/minFunc_2012/minFunc'));
 addpath ../ex1;
 
 %% load mnist data

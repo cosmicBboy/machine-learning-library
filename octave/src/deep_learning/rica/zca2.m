@@ -1,5 +1,5 @@
 function [Z] = zca2(x)
-epsilon = 1e-4;
+epsilon = 1e-2;
 % You should be able to use the code from your PCA/ZCA exercise
 % Retain all of the components from the ZCA transform (i.e. do not do
 % dimensionality reduction)
