@@ -64,8 +64,8 @@ convDim = imageDim-filterDim+1; % dimension of convolved output
 outputDim = (convDim)/poolDim; % dimension of subsampled output
 
 % convDim x convDim x numFilters x numImages tensor for storing activations
-activations += cnnConvolve(filterDim, numFilters, images, Wc, bc);
-activationsPooled += cnnPool(poolDim, activations);
+activations = cnnConvolve(filterDim, numFilters, images, Wc, bc);
+activationsPooled = cnnPool(poolDim, activations);
 
 % Reshape activations into 2-d matrix, hiddenSize x numImages,
 % for Softmax layer
@@ -80,9 +80,9 @@ activationsPooled = reshape(activationsPooled,[],numImages);
 % numClasses x numImages for storing probability that each image belongs to
 % each class.
 probs = zeros(numClasses,numImages);
-Z = exp((Wd * activationsPooled) + bd);
+Z = exp(bsxfun(@plus, (Wd * activationsPooled), bd));
 A = bsxfun(@rdivide, Z, sum(Z));
-probs += A;
+probs = A;
 
 %%======================================================================
 %% STEP 1b: Calculate Cost
@@ -116,7 +116,7 @@ end;
 %  error with respect to the pooling layer for each filter and each image.
 %  Use the kron function and a matrix of ones to do this upsampling
 %  quickly.
-delta_softmax = -(indicator_matrix .- probs);
+delta_softmax = -(indicator_matrix - probs);
 % errors for the pooling layer
 
 % NOTE: I made an error here by multiplying the below term by the derivative of
@@ -145,7 +145,7 @@ for imageNum = 1:numImages
     dp_up = (1 / poolDim ^ 2) * kron(dp, ones(poolDim));
     % select respective activation of the convolution filter matrix
     act_k = activations(:, :, filterNum, imageNum);
-    delta_c(:, :, filterNum, imageNum) = dp_up .* (act_k .* (1 .- act_k));
+    delta_c(:, :, filterNum, imageNum) = dp_up .* (act_k .* (1 - act_k));
   end
 end
 
@@ -170,8 +170,8 @@ for imageNum = 1:numImages
     dc_k = delta_c(:, :, filterNum, imageNum);
     dc_k_rot = rot90(dc_k, 2);
     gc_k = conv2(im, dc_k_rot, 'valid');
-    Wc_grad(:, :, filterNum) += gc_k / numImages;
-    bc_grad(filterNum) += sum(dc_k(:)) / numImages;
+    Wc_grad(:, :, filterNum) = Wc_grad(:, :, filterNum) + gc_k / numImages;
+    bc_grad(filterNum) = bc_grad(filterNum) + sum(dc_k(:)) / numImages;
   end
 end
 
