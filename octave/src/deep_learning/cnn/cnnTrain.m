@@ -2,10 +2,10 @@
 
 %  Instructions
 %  ------------
-% 
+%
 %  This file contains code that helps you get started in building a single.
 %  layer convolutional nerual network. In this exercise, you will only
-%  need to modify cnnCost.m and cnnminFuncSGD.m. You will not need to 
+%  need to modify cnnCost.m and cnnminFuncSGD.m. You will not need to
 %  modify this file.
 
 %%======================================================================
@@ -13,6 +13,8 @@
 %  Here we initialize some parameters used for the exercise.
 
 % Configuration
+% The dimension variables assume that image/convFilter/pool are squares
+% i.e. have shape (dim x dim)
 imageDim = 28;
 numClasses = 10;  % Number of classes (MNIST images fall into 10 classes)
 filterDim = 9;    % Filter size for conv layer
@@ -21,6 +23,7 @@ poolDim = 2;      % Pooling dimension, (should divide imageDim-filterDim+1)
 
 % Load MNIST Train
 addpath ../common/;
+addpath ../ex1;
 images = loadMNISTImages('../common/train-images-idx3-ubyte');
 images = reshape(images,imageDim,imageDim,[]);
 labels = loadMNISTLabels('../common/train-labels-idx1-ubyte');
@@ -32,6 +35,11 @@ theta = cnnInitParams(imageDim,filterDim,numFilters,poolDim,numClasses);
 %%======================================================================
 %% STEP 1: Implement convNet Objective
 %  Implement the function cnnCost.m.
+
+% Convolve every image with every filter, then mean pool the responses
+% NOTE: store the activations after the convolution but before the pooling for
+% efficient back propagation later.
+
 
 %%======================================================================
 %% STEP 2: Gradient Check
@@ -50,27 +58,39 @@ if DEBUG
     db_labels = labels(1:10);
     db_theta = cnnInitParams(imageDim,db_filterDim,db_numFilters,...
                 db_poolDim,numClasses);
-    
+
     [cost grad] = cnnCost(db_theta,db_images,db_labels,numClasses,...
                                 db_filterDim,db_numFilters,db_poolDim);
-    
+
 
     % Check gradients
     numGrad = computeNumericalGradient( @(x) cnnCost(x,db_images,...
                                 db_labels,numClasses,db_filterDim,...
                                 db_numFilters,db_poolDim), db_theta);
- 
+
+    [num_Wc, num_Wd, num_bc, num_bd] = cnnParamsToStack(numGrad,...
+        imageDim,db_filterDim,db_numFilters,db_poolDim,numClasses);
+    [Wc, Wd, bc, bd] = cnnParamsToStack(grad,...
+        imageDim,db_filterDim,db_numFilters,db_poolDim,numClasses);
+
     % Use this to visually compare the gradients side by side
-    disp([numGrad grad]);
-    
+    disp('Wc -----');
+    disp([num_Wc(:) Wc(:)]);
+    disp('Wd -----');
+    disp([num_Wd(:) Wd(:)]);
+    disp('bc -----');
+    disp([num_bc(:) bc(:)]);
+    disp('bd -----');
+    disp([num_bd(:) bd(:)]);
+
     diff = norm(numGrad-grad)/norm(numGrad+grad);
-    % Should be small. In our implementation, these values are usually 
+    % Should be small. In our implementation, these values are usually
     % less than 1e-9.
-    disp(diff); 
- 
+    disp(diff);
+
     assert(diff < 1e-9,...
         'Difference too large. Check your gradient computation again');
-    
+
 end;
 
 %%======================================================================
