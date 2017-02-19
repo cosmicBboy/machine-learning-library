@@ -26,7 +26,6 @@ function [f,g] = softmax_regression_vec(theta, X,y)
   %        Store the objective function value in 'f', and the gradient in 'g'.
   %        Before returning g, make sure you form it back into a vector with g=g(:);
   %
-  %%% YOUR CODE HERE %%%
 
   % first compute the hypothesis. This should be an k-by-m matrix, where m are
   % the number of examples and k are the number of classes.

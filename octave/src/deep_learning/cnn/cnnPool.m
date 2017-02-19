@@ -37,9 +37,9 @@ poolIndex = [1: (convolvedDim / poolDim)] * poolDim - (poolDim - 1);
 % are all ones
 % convPool = conv2()
 for imageNum = 1:numImages
+  im = convolvedFeatures(:, :, :, imageNum);
   for filterNum = 1:numFilters
     % get image
-    im = convolvedFeatures(:, :, :, imageNum);
     % get convolution
     convFeat = im(:, :, filterNum);
     % convolve the pool filter and convolved feature matrix
